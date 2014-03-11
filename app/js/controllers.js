@@ -4,7 +4,7 @@
 
 var recommenderControllers = angular.module('recommenderControllers', []);
 
-recommenderControllers.controller('TopNMoviesCtrl', function($scope, $http) {
+recommenderControllers.controller('TopNMoviesCtrl', ['$scope', '$http', function($scope, $http) {
 
   $scope.userProfile = undefined;
   $scope.hasUserProfile = false;
@@ -104,14 +104,23 @@ recommenderControllers.controller('TopNMoviesCtrl', function($scope, $http) {
 
   	$scope.start();
 
-});
+}]);
 
 /* View a movie by movie id */
-recommenderControllers.controller('ViewMovieCtrl', function($scope, $http, $routeParams) {
-	$scope.routeParams = $routeParams;
-	console.log("Find similar movies at: http://localhost:8080/myapp/movies/similar/" + $routeParams.movieId + "/3");
+recommenderControllers.controller('ViewMovieCtrl', ['$scope', '$routeParams', '$http', 'Movie', 
+	function($scope, $routeParams, $http, Movie) {
+	
+	$scope.movieId = $routeParams.movieId;
+	//console.log("Movie id is: " + $routeParams.movieId);
+	//console.log("Find similar movies at: http://localhost:8080/myapp/movies/similar/" + $routeParams.movieId + "/3");
+
+	$scope.movie = Movie.get({movieId: $routeParams.movieId}, function(movie) {
+		$scope.title = movie.title;
+	});
+	
+
 	$http.get('http://localhost:8080/myapp/movies/similar/' + $routeParams.movieId + "/3").success(function(data) {
-		console.log(data);
+		//console.log(data);
 		//For each movie, get movie metadata from API
 		angular.forEach(data.movies, function(value, key) {
 			value.rating = Math.round(value.rating*10)/10;	
@@ -119,6 +128,6 @@ recommenderControllers.controller('ViewMovieCtrl', function($scope, $http, $rout
 
 		$scope.similarMovies = data.movies;
 	});
+}]);
 
 
-});

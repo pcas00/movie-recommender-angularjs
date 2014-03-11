@@ -6,12 +6,12 @@
 		  
 		  <div class="col-md-4">
 		  	<a href="#" class="thumbnail">
-		  		<img src="http://ia.media-imdb.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1_SX300.jpg" alt="">
+		  		<span movie-image="title" image-width="200" image-height="250"></span>
 		  	</a>
 		  </div>
 		  
 		  <div class="col-md-8">
-		  	<h1>Movie (ID: {{ routeParams.movieId }} )</h1>
+		  	<h1>{{movie.title}}</h1>
 		  	<h2>Tags:</h2>
 		  	<p>Description?</p>
 		  </div>
@@ -21,8 +21,10 @@
 		<div class="row">
  			<div ng-repeat="movie in similarMovies" class="col-lg-4">
 	          <h3>{{movie.title}}</h3>
+	          <span movie-image="movie.title" image-width="75" image-height="100"></span>
 	          <span class="badge"><h1>{{movie.rating}}</h1></span>
-	          <p><a class="btn btn-primary" ng-href="#/movies/{{movie.movieId}}" role="button">View Movie &raquo;</a></p>
+	          <br /><br />
+	          <p><a class="btn btn-primary" ng-href="#/movie/{{movie.movieId}}" role="button">View Movie &raquo;</a></p>
 	       </div>
       </div>
 

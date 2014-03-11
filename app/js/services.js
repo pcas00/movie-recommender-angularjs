@@ -2,8 +2,9 @@
 
 /* Services */
 
-
-// Demonstrate how to register services
-// In this case it is a simple value service.
-angular.module('myApp.services', []).
-  value('version', '0.1');
+var recommenderServices = angular.module('recommenderServices', ['ngResource']);
+ 
+recommenderServices.factory('Movie', ['$resource',
+  function($resource){
+    return $resource('http://localhost:8080/myapp/movie/:movieId', {}, {});
+  }]);
