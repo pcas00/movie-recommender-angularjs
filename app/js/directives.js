@@ -4,17 +4,18 @@
 
 
 angular.module('recommenderDirectives', []).
-	directive('movieImage', ['$http', function($http) {
+	directive('movie', ['$http', function($http) {
 		function link(scope, element, attrs) {
-
 			var imageWidth, imageHeight;
 			// Update element and append new image with movie poster URL
 			function updateImage(movieImageUrl) {
+				console.log("Update image wth " + movieImageUrl);
 				element.append('<img src=' + movieImageUrl + ' width="' + imageWidth + '" height="' + imageHeight + '">');
 			}
 
 			// Get image from OMDBAPI site after formatting movie title
 			function getImage(unformattedMovieTitle) {
+				console.log("Get image");
 				var movieTitle = unformattedMovieTitle.replace(/ /g, "+");
 				//Get first occurence of '('' to find year
 				var firstParenthesis = movieTitle.indexOf('(');
@@ -36,14 +37,20 @@ angular.module('recommenderDirectives', []).
 					console.log(movieData);
 					if (movieData.Response == "False") {
 						console.log("Response is false os changing poster");
-						movieData.Poster = "http://localhost:8000/app/img/no-movie-poster.png"
+						movieData.Poster = "http://localhost:8000/app/img/no-movie-poster.png";
+					} else if (movieData.Post == "N/A") {
+						movieData.Poster = "http://localhost:8000/app/img/no-movie-poster.png";
 					}
+
 					updateImage(movieData.Poster);
 				});
 			}
+			console.log(attrs);
 			// Wait for the movieImage attribute to be loaded to extract movie title string
 			scope.$watch(attrs.movieImage, function(value) {
+				console.log("Value: " + value);
 				if (value != undefined) {
+					console.log("!undefined value: " + value);
 					imageWidth = attrs.imageWidth;
 					imageHeight = attrs.imageHeight;
 					getImage(value);	
@@ -51,6 +58,7 @@ angular.module('recommenderDirectives', []).
 			});
 		}
 		return {
+			restrict: 'AE',
 			link: link
 		}
 	}]);
